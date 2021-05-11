@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const thingShema = mongoose.Schema({
+const sauceSchema = mongoose.Schema({
   userId: { type: String, required: true },
   name: { type: String, required: true, maxlength: [15, "Nombre de caractéres limité a 15"] },
   manufacturer: {
@@ -18,4 +18,4 @@ const thingShema = mongoose.Schema({
   usersDisliked: { type: [String], required: false },
 });
 
-module.exports = mongoose.model("Sauce", thingShema);
+module.exports = mongoose.model("Sauce", sauceSchema);
