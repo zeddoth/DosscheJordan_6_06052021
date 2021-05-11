@@ -3,6 +3,15 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const mongoSanitize = require("express-mongo-sanitize");
+//RATE LIMIT
+const rateLimit = require("express-rate-limit");
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+//
+const helmet = require("helmet");
 const path = require("path");
 const stuffRoutes = require("./routes/stuff");
 const userRoutes = require("./routes/user");
@@ -34,7 +43,9 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD");
   next();
 });
-
+app.use(helmet());
+app.use(mongoSanitize());
+app.use(limiter);
 app.use(bodyParser.json());
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/sauces", stuffRoutes);
