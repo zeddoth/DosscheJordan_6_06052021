@@ -1,4 +1,3 @@
-//REQUIRED
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -8,7 +7,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const rateLimit = require("express-rate-limit");
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 100, // limité chaque IP à 100 requêtes par windowMs
 });
 //
 const helmet = require("helmet");
@@ -19,8 +18,6 @@ const userRoutes = require("./routes/user");
 const host = process.env.DB_HOST;
 const username = process.env.DB_USER;
 const password = process.env.DB_PASS;
-//
-//
 
 //CONNEXION MONGODB
 mongoose
@@ -44,6 +41,8 @@ app.use((req, res, next) => {
   next();
 });
 app.use(helmet());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 app.use(limiter);
 app.use(bodyParser.json());
